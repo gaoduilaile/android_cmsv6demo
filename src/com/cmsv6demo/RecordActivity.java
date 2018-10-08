@@ -101,7 +101,13 @@ public class RecordActivity extends Activity {
 			showSearching();
 			
 			Calendar cal = Calendar.getInstance();
+			//设备端录像搜索
+			//Device video search
 			mSearchHandle = NetClient.SFOpenSrchFile(mDevIdno, NetClient.GPS_FILE_LOCATION_DEVICE, NetClient.GPS_FILE_ATTRIBUTE_RECORD);
+			//存储服务器录像搜索（依据设备"车牌号"，如下）
+			//storageServer video search（According to the license plate number）
+			//mSearchHandle = NetClient.SFOpenSrchFile("粤SAJ888", NetClient.GPS_FILE_LOCATION_STOSVR, NetClient.GPS_FILE_ATTRIBUTE_RECORD);
+			
 			mFileList.clear();
 			//NetClient.SFStartSearchFile(mSearchHandle,2012, 12, 23, NetClient.GPS_FILE_TYPE_ALL, 0, 0, 86400);
 			NetClient.SFStartSearchFile(mSearchHandle, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), NetClient.GPS_FILE_TYPE_ALL, 0, 30000, 86400);

@@ -81,9 +81,14 @@ public class MainActivity extends Activity {
 		
 		
 		mPreferences = getSharedPreferences("com.cmsv6demo", 0);
-        String server = mPreferences.getString("Server", "192.168.1.60");
+        String server = mPreferences.getString("Server", "114.215.25.249");	
+		//server = "192.168.1.60";
+        //server = "114.215.25.249";
+        server = "39.108.194.249";
         mEtServer.setText(server);
-       	String devIdno = mPreferences.getString("DevIDNO", "30005");
+        String devIdno = mPreferences.getString("DevIDNO", "80013393");
+        //devIdno = "30007";
+        devIdno = "30010";
        	mEtDevIdno.setText(devIdno);
        	
 		NetClient.Initialize();
@@ -120,6 +125,7 @@ public class MainActivity extends Activity {
 		localEditor.commit();
     	
 		NetClient.SetDirSvr(mServer, mServer, 6605, 0);
+		
 		return true;
 	}
 	
@@ -128,10 +134,11 @@ public class MainActivity extends Activity {
 			if (!updateServer()) {
 				return ;
 			}
-			
+//			mRealPlay1.setLanInfo(mServer, 6688);
+//			mRealPlay2.setLanInfo(mServer, 6688);
 			mRealPlay1.setViewInfo(mDevIdno, mDevIdno, 0, "CH1");
 	       	mRealPlay2.setViewInfo(mDevIdno, mDevIdno, 1, "CH2");
-	      //是否铺开画面 true是 flase 否
+	      //是否铺满画面 true 是  false否
 	       	mRealPlay1.setVideoBmpExtend(false);
 	       	mRealPlay2.setVideoBmpExtend(false);
 	       	
