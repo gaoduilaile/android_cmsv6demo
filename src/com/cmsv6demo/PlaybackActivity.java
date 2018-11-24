@@ -2,6 +2,7 @@ package com.cmsv6demo;
 
 import net.babelstar.common.play.Playback;
 import net.babelstar.common.play.VideoView;
+import net.babelstar.common.play.Playback.PlaybackListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class PlaybackActivity extends Activity {
 		
 		mPlayback = new Playback(this);
 		mPlayback.setVideoView(mVideoView);
+	
 		StartPlayback();
 	}
 
@@ -70,8 +72,8 @@ public class PlaybackActivity extends Activity {
 			int nLength = intent.getIntExtra("Length", 0);
 			int nChannel = intent.getIntExtra("Channel", 0);
 			mPlayback.StartVod(file, nLength, nChannel);
-			
-			mIsPlaying = false;
+			//mIsPlaying = false;
+			mIsPlaying = true;
 		}
 	}
 	

@@ -1,14 +1,19 @@
 package com.cmsv6demo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import net.babelstar.common.http.AbstractAsyncResponseListener;
+import net.babelstar.common.http.AsyncHttpClient;
 import net.babelstar.common.play.RealPlay;
 import net.babelstar.common.play.Talkback;
 import net.babelstar.common.play.Monitor;
 import net.babelstar.common.play.VideoView;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.babelstar.gviewer.NetClient;
+import com.google.code.microlog4android.Level;
 
 public class MainActivity extends Activity {
 	private boolean mIsStartAV = false;
@@ -43,7 +49,8 @@ public class MainActivity extends Activity {
 	private Button mBtnMonitorStop;
 	
 	private SharedPreferences mPreferences;
-
+	private boolean m_Login;
+	private String mSession;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,21 +85,27 @@ public class MainActivity extends Activity {
 		mRealPlay2 = new RealPlay(this);
 		mRealPlay1.setVideoView(mVideoImage1);
 		mRealPlay2.setVideoView(mVideoImage2);
-		
-		
+		// 如果服务器做了限制 必须要用户登录才能看视频 调用一下接口
+		String url = "http://218.107.216.18:8088/LoginAction_loginMobile.action?update=gViewerAndroid&server=login&userAccount=admin&password=admin";
+		//String url = "http://218.107.216.18:8088/StandardApiAction_login.action?account=admin&password=admin";
+		AsyncHttpClient.sendRequest(this, url, null, new LoginResponseListener());
 		mPreferences = getSharedPreferences("com.cmsv6demo", 0);
         String server = mPreferences.getString("Server", "114.215.25.249");	
-		//server = "192.168.1.60";
-        //server = "114.215.25.249";
-        server = "39.108.194.249";
+		//server = "120.77.0.242";
+        server = "218.107.216.18";
+       // server = "39.108.194.249";
         mEtServer.setText(server);
         String devIdno = mPreferences.getString("DevIDNO", "80013393");
-        //devIdno = "30007";
-        devIdno = "30010";
-       	mEtDevIdno.setText(devIdno);
-       	
-		NetClient.Initialize();
-		StartAV();
+        //devIdno = "30008";
+		  devIdno = "001801606525";
+        //devIdno = "10005";
+       	mEtDevIdno.setText(devIdno);       
+		NetClient.Initialize("/mnt/sdcard/");
+		
+		if (!updateServer()) {
+			return ;
+		}
+		//StartAV();
 	}
 
 	@Override
@@ -131,9 +144,8 @@ public class MainActivity extends Activity {
 	
 	protected void StartAV() {
 		if (!mIsStartAV) {
-			if (!updateServer()) {
-				return ;
-			}
+			
+			///直连播放
 //			mRealPlay1.setLanInfo(mServer, 6688);
 //			mRealPlay2.setLanInfo(mServer, 6688);
 			mRealPlay1.setViewInfo(mDevIdno, mDevIdno, 0, "CH1");
@@ -209,13 +221,16 @@ public class MainActivity extends Activity {
 			} else if (v.equals(mBtnStop)) {
 				StopAV();
 			} else if (v.equals(mBtnRecord)) {
+				if(m_Login){
+					Intent intent = new Intent(); 
+					String devIdno = mEtDevIdno.getText().toString().trim();
+					intent.putExtra("DevIDNO", devIdno); 
+					intent.setClass(MainActivity.this, RecordActivity.class);
+					startActivityForResult(intent, 0);
+				}
 				StopAV();
 				
-				Intent intent = new Intent(); 
-				String devIdno = mEtDevIdno.getText().toString().trim();
-				intent.putExtra("DevIDNO", devIdno); 
-				intent.setClass(MainActivity.this, RecordActivity.class);
-				startActivityForResult(intent, 0);
+				
 			} else if (v.equals(mBtnSound1)) {
 				onSound1();
 			} else if (v.equals(mBtnSound2)) {
@@ -229,6 +244,40 @@ public class MainActivity extends Activity {
 				onMonitorStart();
 			} else if (v.equals(mBtnMonitorStop)) {
 				onMonitorStop();
+			}
+		}
+	}
+	
+	final class LoginResponseListener extends AbstractAsyncResponseListener {
+		@Override
+		protected void onFailure(Throwable e) {
+			if (!MainActivity.this.isFinishing()) {
+//				hideWaitDialog();
+//				ToastUtil.showToast(R.string.login_server_error);
+			}
+		}
+
+		@Override
+		protected void onSuccess(JSONObject jsonObject) {
+			if (!MainActivity.this.isFinishing()) {
+				int result = -1;							
+				try {
+					result = jsonObject.getInt("result");
+					mSession = jsonObject.getString("JSESSIONID");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(result == 0){
+					m_Login = true;
+					NetClient.SetSession(mSession);
+					Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+				}
+
+				
+			} else {
+				//logger.log(Level.INFO,"LoginActivity.LoginResponseListener.onFailure() LoginActivity.this.isFinishing()");
 			}
 		}
 	}
