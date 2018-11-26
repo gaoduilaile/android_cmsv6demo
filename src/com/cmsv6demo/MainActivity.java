@@ -90,14 +90,8 @@ public class MainActivity extends Activity {
 		AsyncHttpClient.sendRequest(this, url, null, new LoginResponseListener());
 		mPreferences = getSharedPreferences("com.cmsv6demo", 0);
         String server = mPreferences.getString("Server", "114.215.25.249");	
-		//server = "120.77.0.242";
-        server = "218.107.216.18";
-       // server = "39.108.194.249";
         mEtServer.setText(server);
         String devIdno = mPreferences.getString("DevIDNO", "80013393");
-        //devIdno = "30008";
-		  devIdno = "001801606525";
-        //devIdno = "10005";
        	mEtDevIdno.setText(devIdno);       
 		NetClient.Initialize("/mnt/sdcard/");
 		
