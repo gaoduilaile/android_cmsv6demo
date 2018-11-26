@@ -2,15 +2,15 @@ package com.cmsv6demo;
 
 import net.babelstar.common.play.Playback;
 import net.babelstar.common.play.VideoView;
-import net.babelstar.common.play.Playback.PlaybackListener;
+//import net.babelstar.common.play.Playback.PlaybackListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+//import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
+//import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 
 public class PlaybackActivity extends Activity {

@@ -1,6 +1,6 @@
 package com.cmsv6demo;
 
-import java.io.UnsupportedEncodingException;
+//import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.babelstar.gviewer.NetClient;
-import com.cmsv6demo.MainActivity.PlayClickListener;
+//import com.cmsv6demo.MainActivity.PlayClickListener;
 import com.cmsv6demo.RecordListAdapter.PlaybackItemClick;
 
 public class RecordActivity extends Activity {

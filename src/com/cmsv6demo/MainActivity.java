@@ -13,7 +13,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
+//import android.os.Environment;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.babelstar.gviewer.NetClient;
-import com.google.code.microlog4android.Level;
+//import com.google.code.microlog4android.Level;
 
 public class MainActivity extends Activity {
 	private boolean mIsStartAV = false;
@@ -86,8 +86,7 @@ public class MainActivity extends Activity {
 		mRealPlay1.setVideoView(mVideoImage1);
 		mRealPlay2.setVideoView(mVideoImage2);
 		// 如果服务器做了限制 必须要用户登录才能看视频 调用一下接口
-		String url = "http://218.107.216.18:8088/LoginAction_loginMobile.action?update=gViewerAndroid&server=login&userAccount=admin&password=admin";
-		//String url = "http://218.107.216.18:8088/StandardApiAction_login.action?account=admin&password=admin";
+		String url = "http://218.107.216.10:8088/LoginAction_loginMobile.action?update=gViewerAndroid&server=login&userAccount=admin&password=admin";	
 		AsyncHttpClient.sendRequest(this, url, null, new LoginResponseListener());
 		mPreferences = getSharedPreferences("com.cmsv6demo", 0);
         String server = mPreferences.getString("Server", "114.215.25.249");	
